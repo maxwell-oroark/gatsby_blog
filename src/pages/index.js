@@ -1,53 +1,50 @@
 import React from "react"
-import { StaticQuery, graphql } from 'gatsby'
+import Header from '../components/Header';
+import { graphql, Link } from 'gatsby'
 
-const TitleAndDescription = ({ data }) => {
-  const title = data.site.siteMetadata.title
-  const description = data.site.siteMetadata.description
+const Layout = ({ data }) => {
+  const { edges } = data.allMarkdownRemark
   return (
+    <div>
+      <Header />
       <div style={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         fontFamily: 'avenir'
       }}>
-        <h2 style={{marginBottom: 0}}>{title}</h2>
-        <p style={{
-          marginTop: 0,
-          opacity: 0.5
-        }}>
-          {description}
-        </p>
-      </div>
-    )
+      {edges.map(edge => {
+        const {frontmatter} = edge.node
+        return (
+          <div
+            key={frontmatter.path}
+            style={{marginBottom: '1rem'}}
+          >
+            <Link to={frontmatter.path}>
+              {frontmatter.title}
+            </Link>
+          </div>
+        )
+      })}
+    </div>
+  </div>
+  )
 }
 
-const Header = () => {
-  return (
-    <StaticQuery 
-      query={graphql`
-      query {
-        site {
-        siteMetadata {
-          description
-          title
+export const query = graphql`
+  query HomePageQuery {
+    allMarkdownRemark {
+      edges {
+        node {
+          frontmatter {
+            title
+            path
+            date
           }
         }
-        }
-        `} 
-       render={
-          data => {
-            return <TitleAndDescription data={data} /> 
-          } 
-       }
-    />
-  )
+      }
+  }
 }
-
-const Layout = () => {
-  return (
-    <div><Header /></div>
-  )
-}
+`
 
 export default Layout
