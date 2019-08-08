@@ -2,7 +2,7 @@
 path: "/second-post"
 title: "play title"
 date: "2018-07-22"
-tags: ["this", "that" ]
+tags: ["other"]
 excerpt: "blah an excerpt"
 ---
 
